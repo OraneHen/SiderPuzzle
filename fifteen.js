@@ -2,9 +2,7 @@ window.onload = function(){
   createpuzzle();
   var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
 
-  shufflepuzzle(shuffle(solvedgrid));
-  var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,99,13,14,15,12];
-  shufflepuzzle(move(solvedgrid, 12));
+  
 }
 
 function createpuzzle(){
@@ -50,36 +48,43 @@ function shufflepuzzle(list){
   for (var i = 0; i < puzzlearea.length; i++) {
     if (list[i]==99) {
       console.log(true);
-      if (i-1>1) {
+      if (i-1>=1 && i%4!=0) {
         puzzlearea[i-1].className="puzzlepiece movablepiece";
       }
-      if (i+1<16) {
+      if (i+1<16 && i%4==1) {
         puzzlearea[i+1].className="puzzlepiece movablepiece";
       }
-      if (i-4>1) {
+      if (i-4>=1) {
         puzzlearea[i-4].className="puzzlepiece movablepiece";
       }
       if (i+4<16) {
         puzzlearea[i+4].className="puzzlepiece movablepiece";
       }
       puzzlearea[i].innerHTML="";
+      puzzlearea[i].style.backgroundImage = "none";
     }
-    else{
+    else if (list[i]<5) {
       puzzlearea[i].innerHTML=list[i];
-    }
-    if (list[i]<5) {
+      puzzlearea[i].className="puzzlepiece";
+      puzzlearea[i].style.backgroundImage = "url(background.jpg)";
       puzzlearea[i].style.backgroundPosition = ((list[i]-1)*-100)+"px "+"0px";
     }
     else if (list[i]<9) {
+      puzzlearea[i].innerHTML=list[i];
+      puzzlearea[i].className="puzzlepiece";
+      puzzlearea[i].style.backgroundImage = "url(background.jpg)";
       puzzlearea[i].style.backgroundPosition = ((list[i]-5)*-100)+"px "+"-100px";
     }
     else if (list[i]<13) {
+      puzzlearea[i].innerHTML=list[i];
+      puzzlearea[i].className="puzzlepiece";
+      puzzlearea[i].style.backgroundImage = "url(background.jpg)";
       puzzlearea[i].style.backgroundPosition = ((list[i]-9)*-100)+"px " +"-200px";
     }
-    else if(list[i]==99) {
-      puzzlearea[i].style.backgroundImage = "none";
-    }
     else {
+      puzzlearea[i].innerHTML=list[i];
+      puzzlearea[i].className="puzzlepiece";
+      puzzlearea[i].style.backgroundImage = "url(background.jpg)";
       puzzlearea[i].style.backgroundPosition = ((list[i]-13)*-100)+"px " +"-300px";
     }
   }
