@@ -1,8 +1,21 @@
 window.onload = function(){
   createpuzzle();
   var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
+  var shuffledgrid;
 
-  
+  document.getElementById("shufflebutton").onclick = function(){
+    window.shuffledgrid = shuffle(solvedgrid);
+    shufflepuzzle(shuffledgrid);
+    solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
+    return shuffledgrid;
+  }
+
+  document.getElementById("puzzlearea").onclick = function(event) {
+    var target = event.target || event.srcElement;
+    window.shuffledgrid = move(shuffledgrid,target.innerHTML);
+    console.log(window.shuffledgrid);
+    shufflepuzzle(window.shuffledgrid);
+};
 }
 
 function createpuzzle(){
@@ -47,11 +60,10 @@ function shufflepuzzle(list){
   var puzzlearea = document.getElementById("puzzlearea").children;
   for (var i = 0; i < puzzlearea.length; i++) {
     if (list[i]==99) {
-      console.log(true);
-      if (i-1>=1 && i%4!=0) {
+      if (i-1>=1 && (i+1)%4!=0) {
         puzzlearea[i-1].className="puzzlepiece movablepiece";
       }
-      if (i+1<16 && i%4==1) {
+      if (i+1<16 && (i+1)%4==1) {
         puzzlearea[i+1].className="puzzlepiece movablepiece";
       }
       if (i-4>=1) {
@@ -130,9 +142,7 @@ function move(list2, value) {
     }
   }
   var col = [collist1,collist2,collist3,collist4];
-  console.log(col);
   var row = [rowlist1,rowlist2,rowlist3,rowlist4];
-  console.log(row);
   var movelist=[];
   var changedlist=[];
   var count;
