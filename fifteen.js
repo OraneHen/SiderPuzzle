@@ -3,8 +3,8 @@ window.onload = function(){
   var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
 
   shufflepuzzle(shuffle(solvedgrid));
-  var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
-  console.log(move(solvedgrid, 4));
+  var solvedgrid = [1,2,3,4,5,6,7,8,9,10,11,99,13,14,15,12];
+  shufflepuzzle(move(solvedgrid, 12));
 }
 
 function createpuzzle(){
@@ -46,11 +46,27 @@ function shuffle(list) {
   }
 
 function shufflepuzzle(list){
-  console.log(list);
   var puzzlearea = document.getElementById("puzzlearea").children;
   for (var i = 0; i < puzzlearea.length; i++) {
-    puzzlearea[i].innerHTML=list[i];
-
+    if (list[i]==99) {
+      console.log(true);
+      if (i-1>1) {
+        puzzlearea[i-1].className="puzzlepiece movablepiece";
+      }
+      if (i+1<16) {
+        puzzlearea[i+1].className="puzzlepiece movablepiece";
+      }
+      if (i-4>1) {
+        puzzlearea[i-4].className="puzzlepiece movablepiece";
+      }
+      if (i+4<16) {
+        puzzlearea[i+4].className="puzzlepiece movablepiece";
+      }
+      puzzlearea[i].innerHTML="";
+    }
+    else{
+      puzzlearea[i].innerHTML=list[i];
+    }
     if (list[i]<5) {
       puzzlearea[i].style.backgroundPosition = ((list[i]-1)*-100)+"px "+"0px";
     }
@@ -113,16 +129,15 @@ function move(list2, value) {
   var row = [rowlist1,rowlist2,rowlist3,rowlist4];
   console.log(row);
   var movelist=[];
-  var changedlist=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,99];
+  var changedlist=[];
   var count;
 
   for (var i = 0; i < col.length; i++) {
     if (col[i].indexOf(99)!=-1 && col[i].indexOf(value)!=-1) {
-      console.log(true);
       count = true;
       if (col[i].indexOf(99) < col[i].indexOf(value)) {
-        for (var j = 0; j < i.length ; j++) {
-          if (j < col[i].indexOf(value)) {
+        for (var j = 0; j < col[i].length ; j++) {
+          if (j >= col[i].indexOf(99)) {
             movelist.push(col[i][j+1]);
           }
           else {
@@ -131,7 +146,7 @@ function move(list2, value) {
         }
         movelist[col[i].indexOf(value)] = 99;
         for (var k = 0; k < movelist.length; k++) {
-          changedlist[k*4+i]=movelist[i];
+          changedlist[k*4+i]=movelist[k];
         }
       }
       else {
@@ -145,28 +160,29 @@ function move(list2, value) {
         }
         movelist[col[i].indexOf(value)] = 99;
         for (var k = 0; k < movelist.length; k++) {
-          changedlist[k*4+i]=movelist[i];
+          changedlist[k*4+i]=movelist[k];
         }
       }
     }
     else {
       for (var k = 0; k < col[i].length; k++) {
         changedlist[k*4+i]=col[i][k];
-        console.log(changedlist);
       }
     }
-    if (count) {
-      return changedlist;
-    }
-    movelist=[];
-    changedlist =[];
   }
+  if (count) {
+    return changedlist;
+  }
+  count=false;
+  movelist=[];
+  changedlist =[];
+
   for (var i = 0; i < row.length; i++) {
     if (row[i].indexOf(99)!=-1 && row[i].indexOf(value)!=-1) {
       count = true;
       if (row[i].indexOf(99) < row[i].indexOf(value)) {
-        for (var j = 0; j < i.length ; j++) {
-          if (j < row[i].indexOf(value)) {
+        for (var j = 0; j < row[i].length ; j++) {
+          if (j >= row[i].indexOf(99)) {
             movelist.push(row[i][j+1]);
           }
           else {
@@ -187,9 +203,9 @@ function move(list2, value) {
             movelist.unshift(row[i][j]);
           }
         }
-        console.log(movelist);
         movelist[row[i].indexOf(value)] = 99;
         for (var k = 0; k < movelist.length; k++) {
+          changedlist.push(movelist[k])
         }
       }
     }
@@ -198,9 +214,9 @@ function move(list2, value) {
         changedlist.push(row[i][k]);
       }
     }
-    if (count) {
-      return changedlist;
-    }
+  }
+  if (count) {
+    return changedlist;
   }
   return changedlist;
 }
